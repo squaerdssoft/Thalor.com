@@ -1,1 +1,217 @@
-yakında
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>THALOR.NETWORK - Ortaçağ Towny Sunucusu</title>
+  <meta name="description" content="Thalor - Ortaçağ temalı Towny Minecraft sunucusu. Kendi krallığını kur, şehirler inşa et ve dünyaya hükmet!" />
+  <style>
+    :root{
+      --bg-from:#18181b;--bg-via:#27272a;--bg-to:#000000;
+      --amber-200:#fde68a;--amber-300:#fcd34d;--amber-400:#fbbf24;--amber-500:#f59e0b;--amber-600:#d97706;--amber-700:#b45309;
+      --zinc-200:#e4e4e7;--zinc-300:#d4d4d8;--zinc-400:#a1a1aa;--zinc-800:#27272a;--zinc-900:#18181b;
+      --white:#fff;--black:#000;
+      --ring: rgba(255,191,36,0.35);
+      --card: rgba(0,0,0,0.4);
+      --card-border: rgba(245,158,11,0.3);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: linear-gradient(to bottom, var(--zinc-900), var(--zinc-800), var(--bg-to));
+      color: var(--white);
+      line-height:1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .container{max-width:1280px;margin-inline:auto;padding-inline:24px}
+    .hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.4}
+    .hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom, rgba(0,0,0,.6), rgba(0,0,0,.4), rgba(0,0,0,.8))}
+    .hero-inner{position:relative;z-index:1;text-align:center;padding:80px 0;width:100%}
+    .title{
+      font-weight:800;letter-spacing:-.02em;margin-bottom:16px;
+      background: linear-gradient(90deg, var(--amber-400), var(--amber-500), var(--amber-600));
+      -webkit-background-clip:text;background-clip:text;color:transparent;white-space:pre-line
+    }
+    .title.xl{font-size:48px}
+    .subtitle{font-size:22px;margin-bottom:8px;color:var(--amber-200);font-weight:700}
+    .lead{font-size:18px;margin:0 auto 24px;color:var(--zinc-300);max-width:48rem}
+    .cta-row{display:flex;gap:16px;flex-direction:column;align-items:center;justify-content:center;margin:24px 0 48px}
+    @media (min-width:640px){.cta-row{flex-direction:row}}
+    .ip{
+      background:rgba(0,0,0,.6);backdrop-filter: blur(6px);
+      border:2px solid rgba(245,158,11,.5);
+      border-radius:12px;padding:16px 24px;font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-size:18px
+    }
+    .btn{
+      display:inline-block;border:0;border-radius:12px;padding:14px 24px;font-weight:800;font-size:18px;cursor:pointer;text-decoration:none;color:#fff;
+      background: linear-gradient(90deg, var(--amber-600), var(--amber-700));
+      transition: transform .15s ease, filter .15s ease, background .2s ease;
+    }
+    .btn:hover{transform: translateY(-1px) scale(1.02);filter: saturate(1.1);background: linear-gradient(90deg, var(--amber-500), var(--amber-600))}
+    .features{padding:80px 0;background: rgba(0,0,0,.5)}
+    .section-title{
+      text-align:center;font-weight:800;margin-bottom:48px;letter-spacing:-.01em
+    }
+    .section-title span{
+      background: linear-gradient(90deg, var(--amber-400), var(--amber-600));
+      -webkit-background-clip:text;background-clip:text;color:transparent
+    }
+    .grid{display:grid;gap:20px}
+    .col-3{grid-template-columns: 1fr}
+    .col-4{grid-template-columns: 1fr 1fr}
+    @media (min-width:768px){.col-3{grid-template-columns: repeat(3, 1fr)}}
+    @media (min-width:1024px){.col-4{grid-template-columns: repeat(4, 1fr)}}
+    .card{
+      background:linear-gradient(135deg, rgba(39,39,42,.8), rgba(24,24,27,.8));
+      border:1px solid rgba(245,158,11,.2);
+      border-radius:14px;padding:24px;transition:border-color .2s ease, transform .2s ease
+    }
+    .card:hover{border-color: rgba(245,158,11,.5);transform: translateY(-2px)}
+    .emoji{font-size:32px;margin-bottom:10px}
+    .card h3{font-size:22px;margin-bottom:8px;color:var(--amber-400);font-weight:800}
+    .muted{color:var(--zinc-300)}
+    .stats{padding:80px 0;background: linear-gradient(to bottom, rgba(0,0,0,.5), rgba(0,0,0,.8))}
+    .stat{ text-align:center }
+    .stat .num{font-size:32px;font-weight:800;color:var(--amber-400);margin-bottom:6px}
+    @media (min-width:768px){.title.xl{font-size:64px}.subtitle{font-size:26px}.lead{font-size:20px}.stat .num{font-size:40px}}
+    footer{background: rgba(0,0,0,.8);border-top:1px solid rgba(245,158,11,.2);padding:48px 0}
+    .footer-top{display:flex;flex-direction:column;gap:16px;align-items:center;justify-content:space-between}
+    @media (min-width:768px){.footer-top{flex-direction:row}}
+    .brand h3{font-size:24px;color:var(--amber-400);font-weight:800;margin-bottom:6px}
+    .links{display:flex;gap:24px;flex-wrap:wrap;justify-content:center}
+    .links a{color:var(--zinc-400);text-decoration:none;transition: color .2s ease}
+    .links a:hover{color:var(--amber-400)}
+    .footer-bottom{margin-top:24px;padding-top:24px;border-top:1px solid rgba(245,158,11,.1);text-align:center;color:var(--zinc-400)}
+    .small{font-size:13px;color:#8a8a93}
+    .ring{outline: 2px solid transparent;outline-offset:2px}
+    .ring:focus{outline-color: var(--ring)}
+  </style>
+</head>
+<body>
+  <!-- HERO -->
+  <section class="hero">
+    <img class="hero-img" alt="Medieval Kingdom"
+      src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/project-uploads/d44360f9-96ee-4292-9a89-86685b119afa/generated_images/epic-medieval-fantasy-castle-kingdom-at--8f791b68-20251107163349.jpg" />
+    <div class="hero-overlay" aria-hidden="true"></div>
+
+    <div class="hero-inner container">
+      <h1 class="title xl">THALOR.NETWORK</h1>
+      <p class="subtitle">Ortaçağ Towny Sunucusu</p>
+      <p class="lead">Kendi krallığını kur, şehirler inşa et ve ortaçağ dünyasında hakimiyetini göster!</p>
+
+      <div class="cta-row">
+        <div class="ip"><span style="color:var(--amber-400);font-weight:700">IP:</span> not-issues.gl.joinmc.link</div>
+        <a class="btn ring" href="#" role="button" aria-label="Sunucuya Katıl">Sunucuya Katıl</a>
+      </div>
+
+      <div class="container" style="max-width:64rem;margin:0 auto">
+        <div class="grid col-3">
+          <div class="card">
+            <div class="emoji">👑</div>
+            <h3>Krallıklar</h3>
+            <p class="muted">Kendi krallığını kur ve yönet</p>
+          </div>
+          <div class="card">
+            <div class="emoji">⚔️</div>
+            <h3>Savaşlar</h3>
+            <p class="muted">Epik savaşlarda zafer kazan</p>
+          </div>
+          <div class="card">
+            <div class="emoji">🏰</div>
+            <h3>Şehirler</h3>
+            <p class="muted">İhtişamlı şehirler inşa et</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ÖZELLİKLER -->
+  <section class="features">
+    <div class="container">
+      <h2 class="section-title"><span>Özellikler</span></h2>
+      <div class="grid" style="grid-template-columns: 1fr;gap:24px">
+        <div class="card">
+          <div class="emoji" style="font-size:40px;margin-bottom:12px">🛡️</div>
+          <h3>Towny Sistemi</h3>
+          <p class="muted">Gelişmiş Towny plugin ile şehir kurma, toprak alma ve şehir yönetimi</p>
+        </div>
+        <div class="card">
+          <div class="emoji" style="font-size:40px;margin-bottom:12px">💰</div>
+          <h3>Ekonomi</h3>
+          <p class="muted">Ticaret yap, işletmeler aç ve zengin ol</p>
+        </div>
+        <div class="card">
+          <div class="emoji" style="font-size:40px;margin-bottom:12px">🗺️</div>
+          <h3>Geniş Harita</h3>
+          <p class="muted">Keşfedilmeyi bekleyen devasa ortaçağ dünyası</p>
+        </div>
+        <div class="card">
+          <div class="emoji" style="font-size:40px;margin-bottom:12px">🤝</div>
+          <h3>İttifaklar</h3>
+          <p class="muted">Diğer şehirlerle ittifak kur, birlikte güçlen</p>
+        </div>
+        <div class="card">
+          <div class="emoji" style="font-size:40px;margin-bottom:12px">⚡</div>
+          <h3>Aktif Topluluk</h3>
+          <p class="muted">Dostane ve yardımsever oyuncu topluluğu</p>
+        </div>
+        <div class="card">
+          <div class="emoji" style="font-size:40px;margin-bottom:12px">🎯</div>
+          <h3>Özel Eventler</h3>
+          <p class="muted">Düzenli turnuvalar ve ödüllü etkinlikler</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- İSTATİSTİKLER -->
+  <section class="stats">
+    <div class="container">
+      <div class="grid col-4" style="max-width:80rem;margin-inline:auto">
+        <div class="stat">
+          <div class="num">200+</div>
+          <div class="muted">Kayıtlı Oyuncu</div>
+        </div>
+        <div class="stat">
+          <div class="num">50+</div>
+          <div class="muted">Aktif Şehir</div>
+        </div>
+        <div class="stat">
+          <div class="num">24/7</div>
+          <div class="muted">Aktif Sunucu</div>
+        </div>
+        <div class="stat">
+          <div class="num">99%</div>
+          <div class="muted">Uptime</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-top">
+        <div class="brand" style="text-align:center">
+          <h3>THALOR</h3>
+          <p class="muted">Ortaçağ Towny Sunucusu</p>
+        </div>
+        <nav class="links" aria-label="Alt menü">
+          <a href="#">Discord</a>
+          <a href="#">Forum</a>
+          <a href="#">Mağaza</a>
+          <a href="#">Kurallar</a>
+        </nav>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2025 Thalor Minecraft Server. Tüm hakları saklıdır.</p>
+        <p class="small" style="margin-top:8px">not-issues.gl.joinmc.link</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
